@@ -4,7 +4,6 @@ export const api = axios.create({
     baseURL: localStorage.getItem('invoiceNinjaURL') || '',
     headers: {
         'x-api-token': localStorage.getItem('invoiceNinjaAPIToken')
-        //  N6mDSTymAsRBrnXAAgchPQVQMQUyVMXJLNYr6Uf2VNe0obu7Zuhekj1BjUZyMIBf
     }
 });
 
