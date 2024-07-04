@@ -8,9 +8,6 @@ export function useSettings() {
         beginning: localStorage.getItem('invoiceNinjaTaskStatusBeginning'),
         running: localStorage.getItem('invoiceNinjaTaskStatusRunning'),
         finished: localStorage.getItem('invoiceNinjaTaskStatusFinished'),
-        // beginning: '4zbqp1vGap',
-        // running: '3YaOXmlLbx',
-        // finished: 'MYerqK4kdO',
     })
 
     return {statuses, isComplete}
