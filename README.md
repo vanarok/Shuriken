@@ -1,3 +1,5 @@
+[![Available on Chrome Web Store](https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/tbyBjqi7Zu733AAKA5n4.png)](https://chromewebstore.google.com/detail/shuriken-tasks-manager-fo/mhebmjhmfpinkgpmfklckaphadljbpcp)
+
 # Shuriken: Tasks manager for Invoice Ninja - Chrome extension
 
 Open-source alternative for the official Invoice Ninja: Tasks Chrome extension
@@ -5,7 +7,7 @@ Open-source alternative for the official Invoice Ninja: Tasks Chrome extension
 ## Roadmap
 
 - [x] Make basic features
-- [ ] Publish on chrome store
+- [x] Publish on chrome store
 - [ ] Make advanced features
 - [ ] Support
 
