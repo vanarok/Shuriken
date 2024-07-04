@@ -26,6 +26,7 @@ Open-source alternative for the official Invoice Ninja: Tasks Chrome extension
 
 ### Advanced features
 
+- [ ] Automation publish on chrome store
 - [ ] Searching projects
 - [ ] Editing task
 - [ ] Adding and removing time from task
