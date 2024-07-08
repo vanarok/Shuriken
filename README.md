@@ -6,31 +6,31 @@ Open-source alternative for the official Invoice Ninja: Tasks Chrome extension
 
 ## Roadmap
 
-- [x] Make basic features
-- [x] Publish on chrome store
-- [ ] Make advanced features
-- [ ] Support
+### Completed
+- **Basic Features**
+  - Selecting project
+  - Tracking time spent on task
+  - Searching task
+  - Creating task
+  - Deleting task
+  - Assigning task to project
+  - Setting task status to ready
+  - Authentication with API Token for Invoice Ninja
+  - Configuring task statuses
+  - Simple setup configuration
+- **Publish**
+  - Published on Chrome Store
 
-### Basic features
+### To Do
+- **Advanced Features**
+  - [ ] Automate publishing on Chrome Store
+  - [ ] Search projects
+  - [ ] Edit task
+  - [ ] Add and remove time from task
+  - [ ] Add and remove statuses from task
+  - [ ] Edit description for task segments
+  - [ ] Create, edit, and delete projects
+  - [ ] Trello-like Kanban board
 
-- [X] Selecting project
-- [X] Tracking time spent on task
-- [x] Searching task
-- [x] Creating task
-- [x] Deleting task
-- [x] Assign task to project
-- [x] Status ready for task
-- [x] Authentication with API Token for Invoice Ninja
-- [X] Configuration task statuses
-- [X] Simple setup configuration
-
-### Advanced features
-
-- [ ] Automation publish on chrome store
-- [ ] Searching projects
-- [ ] Editing task
-- [ ] Adding and removing time from task
-- [ ] Adding and removing statuses from task
-- [ ] Add editing description to segments task
-- [ ] Creating, Editing description and deleting project
-- [ ] Trello like kanban
+- **Support**
+  - Provide ongoing support and updates
