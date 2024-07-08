@@ -31,6 +31,8 @@ Open-source alternative for the official Invoice Ninja: Tasks Chrome extension
   - [ ] Edit description for task segments
   - [ ] Create, edit, and delete projects
   - [ ] Trello-like Kanban board
+- **Publish**
+  - [ ] Publish on Firefox Add-ons
 
 - **Support**
   - Provide ongoing support and updates
