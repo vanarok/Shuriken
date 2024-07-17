@@ -1,13 +1,18 @@
-import {computed, reactive} from "vue";
+import {computed, reactive} from 'vue'
 
 export function useSettings() {
-    const isComplete = computed(() =>
-        statuses.beginning && statuses.running && statuses.finished && localStorage.getItem('invoiceNinjaAPIToken') && localStorage.getItem('invoiceNinjaURL')
+    const isComplete = computed(
+        () =>
+            localStorage.getItem('invoiceNinjaTaskStatusBeginning') &&
+            localStorage.getItem('invoiceNinjaTaskStatusRunning') &&
+            localStorage.getItem('invoiceNinjaTaskStatusFinished') &&
+            localStorage.getItem('invoiceNinjaAPIToken') &&
+            localStorage.getItem('invoiceNinjaURL')
     )
     const statuses = reactive({
         beginning: localStorage.getItem('invoiceNinjaTaskStatusBeginning'),
         running: localStorage.getItem('invoiceNinjaTaskStatusRunning'),
-        finished: localStorage.getItem('invoiceNinjaTaskStatusFinished'),
+        finished: localStorage.getItem('invoiceNinjaTaskStatusFinished')
     })
 
     return {statuses, isComplete}
