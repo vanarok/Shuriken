@@ -1,16 +1,15 @@
 <script lang="ts" setup>
-
 import {VueQueryDevtools} from '@tanstack/vue-query-devtools'
-import Tasks from '@/views/Tasks.vue';
-import Projects from "@/views/Projects.vue";
-import {computed, ref} from "vue";
-import RunningTask from "@/components/RunningTask.vue";
-import {useRunningTaskQuery} from "@/composables/useRunningTaskQuery";
-import {isTaskRunning} from "@/helpers";
-import ProjectsActivator from "@/components/ProjectsActivator.vue";
-import {useAssignTaskProject} from "@/composables/useAssignTaskProject";
-import Settings from "@/views/Settings.vue";
-import {useSettings} from "@/composables/useSettings";
+import Tasks from '@/views/Tasks.vue'
+import Projects from '@/views/Projects.vue'
+import {computed, ref} from 'vue'
+import RunningTask from '@/components/RunningTask.vue'
+import {useRunningTaskQuery} from '@/composables/useRunningTaskQuery'
+import {isTaskRunning} from '@/helpers'
+import ProjectsActivator from '@/components/ProjectsActivator.vue'
+import {useAssignTaskProject} from '@/composables/useAssignTaskProject'
+import Settings from '@/views/Settings.vue'
+import {useSettings} from '@/composables/useSettings'
 
 const page = ref<'tasks' | 'projects' | 'settings'>('tasks')
 const project = ref<unknown | null>(JSON.parse(localStorage.getItem('project')) || null)
@@ -57,65 +56,50 @@ const {statuses, isComplete} = useSettings()
 if (!isComplete.value) {
     page.value = 'settings'
 }
-
 </script>
 
 <template>
     <div class="project">
         <Transition mode="out-in">
-            <RunningTask v-if="taskRunning" :project/>
+            <RunningTask v-if="taskRunning" :project />
             <div v-else style="display: flex; flex-direction: column; gap: 1em">
                 <div class="control-panel">
                     <Transition mode="out-in">
-                        <div v-if="page === 'tasks'"
-                             style="display: flex; flex-direction: column; gap: 1em; width: 100%; align-items: center">
-                            <ProjectsActivator :projectId @open-projects-page="page = 'projects'"
-                                               @clear-project-choose="updateProjectChoose(null)"/>
+                        <div v-if="page === 'tasks'" style="display: flex; flex-direction: column; gap: 1em; width: 100%; align-items: center">
+                            <ProjectsActivator :projectId @open-projects-page="page = 'projects'" @clear-project-choose="updateProjectChoose(null)" />
                             <div v-if="project" class="values">
-                                <div>Budget
+                                <div>
+                                    Budget
                                     <div class="value">{{ project.budgeted_hours }}h</div>
                                 </div>
-                                <div>Spent
-                                    <div
-                                        :class="spentHoursColor"
-                                        class="value">{{ project.current_hours }}h
-                                    </div>
+                                <div>
+                                    Spent
+                                    <div :class="spentHoursColor" class="value">{{ project.current_hours }}h</div>
                                 </div>
                                 <div v-if="project.due_date">
                                     Due date
-                                    <div class="value" style="width: 8em"> {{
-                                            new Date(project.due_date).toLocaleDateString()
-                                        }}
-                                    </div>
+                                    <div class="value" style="width: 8em">{{ new Date(project.due_date).toLocaleDateString() }}</div>
                                 </div>
                             </div>
                         </div>
-                        <button
-                            v-else-if="assignProjectMode"
-                            id="project-choose-activator"
-                            @click="cancelAssignProjectMode"
-                        >
+                        <button v-else-if="assignProjectMode" id="project-choose-activator" @click="cancelAssignProjectMode">
                             <span>Cancel</span>
                         </button>
-                        <button
-                            v-else-if="page === 'projects' || page === 'settings' && isComplete"
-                            id="project-choose-activator"
-                            @click="page = 'tasks'"
-                        >
+                        <button v-else-if="page === 'projects' || page === 'settings'" id="project-choose-activator" @click="page = 'tasks'">
                             <span>Return to tasks</span>
                         </button>
                     </Transition>
                 </div>
                 <Transition mode="out-in">
-                    <Tasks v-if="page === 'tasks'" :project="project"/>
-                    <Projects v-else-if="page === 'projects'" @project-choose="updateProjectChoose"/>
-                    <Settings v-else-if="page === 'settings'"/>
+                    <Tasks v-if="page === 'tasks'" :project="project" />
+                    <Projects v-else-if="page === 'projects'" @project-choose="updateProjectChoose" />
+                    <Settings v-else-if="page === 'settings'" />
                 </Transition>
-                <button v-if="page !== 'settings'" class="settings-button i-mdi-cog" @click="page = 'settings'"/>
+                <button v-if="page !== 'settings'" class="settings-button i-mdi-cog" @click="page = 'settings'" />
             </div>
         </Transition>
     </div>
-    <VueQueryDevtools/>
+    <VueQueryDevtools />
 </template>
 
 <style scoped>
