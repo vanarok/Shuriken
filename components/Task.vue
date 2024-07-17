@@ -1,44 +1,40 @@
 <template>
-    <div :class="{'task-finished': taskFinished}" class="container"
-         @mouseleave.prevent="visibleOverlay = false"
-         @mouseover.prevent="visibleOverlay = true"
-    >
-        <textarea :class="[{'task-text-overlay-effect': visibleOverlay}]" :value="task.description"
-                  class="task-text"
-                  disabled
-                  style="background: none; font-family: Inter; font-size: 1.2em; padding: 0; width: 100%; height: 100%; border: none;"
-                  type="text"
+    <div :class="{'task-finished': taskFinished}" class="container" @mouseleave.prevent="visibleOverlay = false" @mouseover.prevent="visibleOverlay = true">
+        <textarea
+            :class="[{'task-text-overlay-effect': visibleOverlay}]"
+            :value="task.description"
+            class="task-text"
+            disabled
+            style="background: none; font-family: Inter; font-size: 1.2em; padding: 0; width: 100%; height: 100%; border: none"
+            type="text"
         />
         <Transition mode="out-in">
             <div v-if="visibleOverlay" class="task-actions" @mouseover="visibleOverlay = true">
                 <button :disabled="taskFinished" @click="startTask({task, status: statuses.running})">
-                    <div class="i-mdi-timer-play-outline"/>
+                    <div class="i-mdi-timer-play-outline" />
                 </button>
                 <button :disabled="taskFinished" @click="confirmRemoveTask(task)">
-                    <div v-if="confirmedRemove" class="i-mdi-delete-alert"/>
-                    <div v-else class="i-mdi-delete"/>
+                    <div v-if="confirmedRemove" class="i-mdi-delete-alert" />
+                    <div v-else class="i-mdi-delete" />
                 </button>
-                <button
-                    @click="setStatus({task, status: taskFinished ? statuses.beginning : statuses.finished})">
-                    <div v-if="taskFinished" class="i-mdi-check"/>
-                    <div v-else class="i-mdi-check-outline"/>
+                <button @click="setStatus({task, status: taskFinished ? statuses.beginning : statuses.finished})">
+                    <div v-if="taskFinished" class="i-mdi-check" />
+                    <div v-else class="i-mdi-check-outline" />
                 </button>
             </div>
         </Transition>
         <Transition mode="out-in">
-            <button v-if="!task.project_id" class="assign-project-button" @click="enableAssignProjectMode(task)">
-                Assign project
-            </button>
+            <button v-if="!task.project_id" class="assign-project-button" @click="enableAssignProjectMode(task)">Assign project</button>
         </Transition>
     </div>
 </template>
 <script lang="ts" setup>
-import {computed, ref} from "vue";
-import {deleteTask, putTask} from "@/api";
-import {useMutation, useQueryClient} from "@tanstack/vue-query";
-import {useAssignTaskProject} from "@/composables/useAssignTaskProject";
-import dayjs from "dayjs";
-import {useSettings} from "@/composables/useSettings";
+import {computed, ref} from 'vue'
+import {deleteTask, putTask} from '@/api'
+import {useMutation, useQueryClient} from '@tanstack/vue-query'
+import {useAssignTaskProject} from '@/composables/useAssignTaskProject'
+import dayjs from 'dayjs'
+import {useSettings} from '@/composables/useSettings'
 
 const props = defineProps<{
     task: Record<any, any>
@@ -48,26 +44,30 @@ const props = defineProps<{
 const visibleOverlay = ref(false)
 
 const {mutate: startTask} = useMutation({
-    mutationFn: ({task, status}: { task: Record<any, any>, status: string }) => putTask(task.id, {
-        action: 'start',
-        data: {...task, status_id: status}
-    }),
+    mutationFn: ({task, status}: {task: Record<any, any>; status: string}) =>
+        putTask(task.id, {
+            action: 'start',
+            data: {...task, status_id: status}
+        }),
     onMutate: async ({task, status}) => {
         await queryClient.cancelQueries({queryKey: ['running-task', props.project?.id ?? null]})
         const previousTodos = queryClient.getQueryData(['running-task', props.project?.id ?? null])
         queryClient.setQueryData(['running-task', props.project?.id ?? null], (old) => {
-            const date = dayjs();
+            const date = dayjs()
             const unixTimestamp = date.unix()
             const timeLogParsed = JSON.parse(task.time_log)
             const timeLogRunning = [...timeLogParsed, [unixTimestamp, 0]]
 
             return {
                 ...old,
-                data: [{
-                    ...task, status_id: status,
-                    time_log: JSON.stringify(timeLogRunning)
-                }],
-            };
+                data: [
+                    {
+                        ...task,
+                        status_id: status,
+                        time_log: JSON.stringify(timeLogRunning)
+                    }
+                ]
+            }
         })
 
         return {previousTodos}
@@ -80,7 +80,7 @@ const {mutate: startTask} = useMutation({
     // Always refetch after error or success:
     onSettled() {
         queryClient.invalidateQueries({queryKey: ['running-task', props.project?.id ?? null]})
-    },
+    }
 })
 
 const queryClient = useQueryClient()
@@ -96,7 +96,7 @@ const {mutate: removeTask} = useMutation({
 
         // Optimistically update to the new value
         queryClient.setQueryData(['tasks', props.project?.id ?? null, ''], (old) => {
-            return {...old, data: [...old.data.filter(t => t.id !== removedTask.id)]};
+            return {...old, data: [...old.data.filter((t) => t.id !== removedTask.id)]}
         })
 
         // Return a context object with the snapshotted value
@@ -105,12 +105,12 @@ const {mutate: removeTask} = useMutation({
     // If the mutation fails,
     // use the context returned from onMutate to roll back
     onError: (err, newTodo, context) => {
-        queryClient.setQueryData(["tasks", props.project?.id ?? null, ''], context.previousTodos)
+        queryClient.setQueryData(['tasks', props.project?.id ?? null, ''], context.previousTodos)
     },
     // Always refetch after error or success:
     onSettled: () => {
         queryClient.invalidateQueries({queryKey: ['tasks', props.project?.id ?? null, '']})
-    },
+    }
 })
 
 const {enableAssignProjectMode} = useAssignTaskProject()
@@ -129,17 +129,17 @@ const confirmRemoveTask = (task: unknown) => {
 
 const {statuses} = useSettings()
 const {mutate: setStatus} = useMutation({
-    mutationFn: ({task, status}: { task: Record<any, any>, status: string }) => {
-        return putTask(task.id, {data: {...task, status_id: status}});
+    mutationFn: ({task, status}: {task: Record<any, any>; status: string}) => {
+        return putTask(task.id, {data: {...task, status_id: status}})
     },
     onMutate: async ({task, status}) => {
         await queryClient.cancelQueries({queryKey: ['tasks', props.project?.id ?? null]})
         const previousTodos = queryClient.getQueryData(['tasks', props.project?.id ?? null])
-        queryClient.setQueryData(['tasks', props.project?.id ?? null, ""], (old: Record<any, any>) => {
+        queryClient.setQueryData(['tasks', props.project?.id ?? null, ''], (old: Record<any, any>) => {
             return {
-                data: [...old.data.map((t: Record<any, any>) => t.id === task.id ? {...t, status_id: status} : t)],
+                data: [...old.data.map((t: Record<any, any>) => (t.id === task.id ? {...t, status_id: status} : t))],
                 meta: old.meta
-            };
+            }
         })
 
         return {previousTodos}
@@ -152,7 +152,7 @@ const {mutate: setStatus} = useMutation({
     // Always refetch after error or success:
     onSettled() {
         queryClient.invalidateQueries({queryKey: ['tasks']})
-    },
+    }
 })
 const taskFinished = computed(() => {
     if (props.task.status_id === statuses.finished) {
@@ -207,7 +207,7 @@ const taskFinished = computed(() => {
     }
 
     .task-text-overlay-effect {
-        filter: blur(2px)
+        filter: blur(2px);
     }
 }
 
