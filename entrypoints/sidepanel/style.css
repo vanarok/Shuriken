@@ -107,7 +107,6 @@ select {
     transition: border-color 0.25s;
     height: fit-content;
     background: #1a1a1a;
-
 }
 
 select :hover {
@@ -129,7 +128,7 @@ option {
     cursor: pointer;
     transition: border-color 0.25s;
     height: fit-content;
-    box-sizing: border-box;;
+    box-sizing: border-box;
 }
 
 option :hover {
@@ -178,7 +177,7 @@ option:focus-visible {
 
 .v-enter-active,
 .v-leave-active {
-    transition: opacity 0.2s ease;
+    transition: opacity 0.1s ease;
 }
 
 .v-enter-from,
@@ -196,7 +195,7 @@ option:focus-visible {
 .list-move, /* apply transition to moving elements */
 .list-enter-active,
 .list-leave-active {
-    transition: all 0.5s ease;
+    transition: all 0.3s ease;
 }
 
 .list-enter-from,
@@ -219,5 +218,3 @@ details summary:hover {
     color: #646cff;
     user-select: none;
 }
-
-
