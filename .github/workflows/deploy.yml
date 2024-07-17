@@ -58,7 +58,9 @@ jobs:
       - name: Submit to stores
         run: |
           pnpm wxt submit \
-            --chrome-zip ${{ env.DIRECTORY }}/${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-chrome.zip \
+            --chrome-zip ${{ env.DIRECTORY }}/${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-chrome.zip \            
+            --firefox-sources-zip ${{ env.DIRECTORY }}/${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-sources.zip \
+            --chrome-skip-submit-review 
         env:
           CHROME_EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
           CHROME_CLIENT_ID: ${{ secrets.CLIENT_ID }}
