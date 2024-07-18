@@ -27,7 +27,8 @@ export default defineConfig({
             _execute_action: {
                 suggested_key: {
                     default: 'Ctrl+I',
-                    mac: 'Ctrl+I'
+                    mac: 'Ctrl+I',
+                    windows: 'Ctrl+I'
                 }
             }
         }
