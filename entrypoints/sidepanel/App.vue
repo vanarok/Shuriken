@@ -1,15 +1,14 @@
 <script lang="ts" setup>
-import {VueQueryDevtools} from '@tanstack/vue-query-devtools'
-import Tasks from '@/views/Tasks.vue'
-import Projects from '@/views/Projects.vue'
-import {computed, ref} from 'vue'
-import RunningTask from '@/components/RunningTask.vue'
-import {useRunningTaskQuery} from '@/composables/useRunningTaskQuery'
-import {isTaskRunning} from '@/helpers'
 import ProjectsActivator from '@/components/ProjectsActivator.vue'
+import RunningTask from '@/components/RunningTask.vue'
 import {useAssignTaskProject} from '@/composables/useAssignTaskProject'
-import Settings from '@/views/Settings.vue'
+import {useRunningTask} from '@/composables/useRunningTask'
 import {useSettings} from '@/composables/useSettings'
+import Projects from '@/views/Projects.vue'
+import Settings from '@/views/Settings.vue'
+import Tasks from '@/views/Tasks.vue'
+import {VueQueryDevtools} from '@tanstack/vue-query-devtools'
+import {computed, ref} from 'vue'
 
 const page = ref<'tasks' | 'projects' | 'settings'>('tasks')
 const project = ref<unknown | null>(JSON.parse(localStorage.getItem('project')) || null)
@@ -33,14 +32,7 @@ const spentHoursColor = computed(() => {
     }
 })
 
-const {data: tasks} = useRunningTaskQuery(project.value?.id ?? null)
-const taskRunning = computed(() => {
-    const firstRunningTask = tasks.value?.data[0]
-    if (firstRunningTask) {
-        return isTaskRunning(firstRunningTask)
-    }
-    return false
-})
+const {isRunning} = useRunningTask(projectId)
 
 const {assignProjectMode, cancelAssignProjectMode, assignTaskProject} = useAssignTaskProject({
     project,
@@ -61,7 +53,7 @@ if (!isComplete.value) {
 <template>
     <div class="project">
         <Transition mode="out-in">
-            <RunningTask v-if="taskRunning" :project />
+            <RunningTask v-if="isRunning" :project />
             <div v-else style="display: flex; flex-direction: column; gap: 1em">
                 <div class="control-panel">
                     <Transition mode="out-in">

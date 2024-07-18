@@ -1,19 +1,19 @@
-import {readonly, Ref, ref, watch} from "vue";
-import {useMutation} from "@tanstack/vue-query";
-import {putTask} from "@/api";
+import {putTask} from '@/api'
+import {useMutation} from '@tanstack/vue-query'
+import {readonly, Ref, ref, watch} from 'vue'
 
 export const assignProjectMode = ref(false)
 export const assignProjectModeTask = ref<unknown | null>(null)
 
 export const useAssignTaskProject = (options?: {
-    project?: Ref<unknown | null>,
-    cancelCallback?: () => void,
+    project?: Ref<unknown | null>
+    cancelCallback?: () => void
     enableCallback?: () => void
 }): {
-    assignProjectMode: Readonly<Ref<boolean>>,
-    cancelAssignProjectMode?: () => void,
+    assignProjectMode: Readonly<Ref<boolean>>
+    cancelAssignProjectMode?: () => void
     enableAssignProjectMode?: (task: unknown) => void
-    assignTaskProject?: () => void,
+    assignTaskProject?: () => void
 } => {
     const updateAssignProjectMode = (value: boolean) => {
         assignProjectMode.value = value
@@ -38,14 +38,20 @@ export const useAssignTaskProject = (options?: {
         }
     })
 
-    const {mutate: assignTaskProject, isPending, isSuccess, error} = useMutation({
-        mutationFn: () => putTask(assignProjectModeTask.value.id, {
-            action: 'assign',
-            data: {...assignProjectModeTask.value, project_id: options.project.value.id}
-        }),
+    const {
+        mutate: assignTaskProject,
+        isPending,
+        isSuccess,
+        error
+    } = useMutation({
+        mutationFn: () =>
+            putTask(assignProjectModeTask.value.id, {
+                action: 'assign',
+                data: {...assignProjectModeTask.value, project_id: options.project.value.id}
+            }),
         onSuccess(variables) {
             cancelAssignProjectMode()
-        },
+        }
     })
 
     watch(error, () => {

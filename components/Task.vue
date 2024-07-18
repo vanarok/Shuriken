@@ -23,18 +23,20 @@
                 </button>
             </div>
         </Transition>
-        <Transition mode="out-in">
+        <div class="info">
+            <span class="time">{{ getTime() }}</span>
             <button v-if="!task.project_id" class="assign-project-button" @click="enableAssignProjectMode(task)">Assign project</button>
-        </Transition>
+        </div>
     </div>
 </template>
 <script lang="ts" setup>
-import {computed, ref} from 'vue'
 import {deleteTask, putTask} from '@/api'
-import {useMutation, useQueryClient} from '@tanstack/vue-query'
 import {useAssignTaskProject} from '@/composables/useAssignTaskProject'
-import dayjs from 'dayjs'
 import {useSettings} from '@/composables/useSettings'
+import {calculateTime} from '@/helpers'
+import {useMutation, useQueryClient} from '@tanstack/vue-query'
+import dayjs from 'dayjs'
+import {computed, ref} from 'vue'
 
 const props = defineProps<{
     task: Record<any, any>
@@ -42,44 +44,66 @@ const props = defineProps<{
 }>()
 
 const visibleOverlay = ref(false)
+const {statuses} = useSettings()
 
-const {mutate: startTask} = useMutation({
+const {
+    mutate: startTask,
+    isError,
+    error
+} = useMutation({
     mutationFn: ({task, status}: {task: Record<any, any>; status: string}) =>
         putTask(task.id, {
             action: 'start',
             data: {...task, status_id: status}
         }),
     onMutate: async ({task, status}) => {
-        await queryClient.cancelQueries({queryKey: ['running-task', props.project?.id ?? null]})
-        const previousTodos = queryClient.getQueryData(['running-task', props.project?.id ?? null])
-        queryClient.setQueryData(['running-task', props.project?.id ?? null], (old) => {
-            const date = dayjs()
-            const unixTimestamp = date.unix()
-            const timeLogParsed = JSON.parse(task.time_log)
-            const timeLogRunning = [...timeLogParsed, [unixTimestamp, 0]]
+        await queryClient.cancelQueries({queryKey: ['tasks', props.project?.id ?? null, statuses.running]})
 
-            return {
-                ...old,
-                data: [
-                    {
-                        ...task,
-                        status_id: status,
-                        time_log: JSON.stringify(timeLogRunning)
-                    }
-                ]
+        // Snapshot the previous value
+        const previousTodos = queryClient.getQueryData(['tasks', props.project?.id ?? null, ''])
+
+        const date = dayjs()
+        const unixTimestamp = date.unix()
+        const timeLogParsed = JSON.parse(task.time_log)
+        const timeLogRunning = [...timeLogParsed, [unixTimestamp, 0]]
+        const optimisticTask = {
+            data: [
+                {
+                    ...task,
+                    status_id: status,
+                    time_log: JSON.stringify(timeLogRunning)
+                }
+            ],
+            meta: {
+                pagination: {
+                    total: 1,
+                    count: 1,
+                    per_page: 6,
+                    current_page: 1,
+                    total_pages: 1,
+                    links: {}
+                }
             }
-        })
+        }
 
-        return {previousTodos}
+        queryClient.setQueryData(['tasks', props.project?.id ?? null, statuses.running], optimisticTask)
+
+        return {optimisticTask, previousTodos}
+    },
+    onSuccess: (result, variables, context) => {
+        // Replace optimistic todo in the todos list with the result
+        queryClient.setQueryData(['tasks', props.project?.id ?? null, statuses.running], (old) => ({
+            data: old.data.map((task) => (task.id === context.optimisticTask.id ? result.data : task))
+        }))
     },
     // If the mutation fails,
     // use the context returned from onMutate to roll back
     onError(_, __, context) {
-        queryClient.setQueryData(['running-task', props.project?.id ?? null], context.previousTodos)
+        queryClient.setQueryData(['tasks', props.project?.id ?? null], context.previousTodos)
     },
-    // Always refetch after error or success:
+    /*     Always refetch after error or success: */
     onSettled() {
-        queryClient.invalidateQueries({queryKey: ['running-task', props.project?.id ?? null]})
+        queryClient.invalidateQueries({queryKey: ['tasks', props.project?.id ?? null]})
     }
 })
 
@@ -127,7 +151,6 @@ const confirmRemoveTask = (task: unknown) => {
     }
 }
 
-const {statuses} = useSettings()
 const {mutate: setStatus} = useMutation({
     mutationFn: ({task, status}: {task: Record<any, any>; status: string}) => {
         return putTask(task.id, {data: {...task, status_id: status}})
@@ -160,6 +183,16 @@ const taskFinished = computed(() => {
     }
     return false
 })
+
+const getTime = () => {
+    const time = Number(
+        calculateTime(props.task.time_log, {
+            inSeconds: true,
+            calculateLastTimeLog: false
+        })
+    )
+    return new Date(time * 1000).toISOString().slice(11, 19)
+}
 </script>
 
 <style scoped>
@@ -228,5 +261,19 @@ const taskFinished = computed(() => {
     textarea {
         color: gray;
     }
+
+    .time {
+        color: lightgray;
+    }
+}
+
+.time {
+    text-align: start;
+    color: gray;
+}
+
+.info {
+    display: flex;
+    gap: 0.5em;
 }
 </style>
