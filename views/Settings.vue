@@ -44,7 +44,7 @@ const updateStatus = (value: string | null, key: 'beginning' | 'running' | 'fini
         <form class="connect-invoice-ninja" @submit.prevent="saveAPI">
             <h3 for="token">
                 1. Get token from
-                <a href="https://app.invoicing.co/?#/settings/integrations/api_tokens/create">Invoice Ninja</a>
+                <a href="https://app.invoicing.co/?#/settings/integrations/api_tokens/create" target="_blank">Invoice Ninja</a>
             </h3>
 
             <input v-model="invoiceNinjaAPIToken" placeholder="xxxxxxxxxxxxxx" required type="text" />
