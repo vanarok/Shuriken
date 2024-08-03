@@ -1,31 +1,27 @@
 <template>
-    <div :class="{'task-finished': taskFinished}" class="container" @mouseleave.prevent="visibleOverlay = false" @mouseover.prevent="visibleOverlay = true">
+    <div :class="{'task-finished': taskFinished}" class="container">
         <textarea
             :class="[{'task-text-overlay-effect': visibleOverlay}]"
             :value="task.description"
-            class="task-text"
             disabled
+            class="task-text"
             style="background: none; font-family: Inter; font-size: 1.2em; padding: 0; width: 100%; height: 100%; border: none"
             type="text"
         />
-        <Transition mode="out-in">
-            <div v-if="visibleOverlay" class="task-actions" @mouseover="visibleOverlay = true">
-                <button :disabled="taskFinished" @click="startTask({task, status: statuses.running})">
-                    <div class="i-mdi-timer-play-outline" />
-                </button>
-                <button :disabled="taskFinished" @click="confirmRemoveTask(task)">
-                    <div v-if="confirmedRemove" class="i-mdi-delete-alert" />
-                    <div v-else class="i-mdi-delete" />
-                </button>
-                <button @click="setStatus({task, status: taskFinished ? statuses.beginning : statuses.finished})">
-                    <div v-if="taskFinished" class="i-mdi-check" />
-                    <div v-else class="i-mdi-check-outline" />
-                </button>
-            </div>
-        </Transition>
         <div class="info">
             <span class="time">{{ getTime() }}</span>
-            <button v-if="!task.project_id" class="assign-project-button" @click="enableAssignProjectMode(task)">Assign project</button>
+            <button v-if="!task.project_id" class="assign-project-button i-mdi-folder-plus-outline" @click="enableAssignProjectMode(task)"></button>
+            <button v-if="false" class="i-mdi-content-save-outline save"></button>
+            <button class="i-mdi-timer-play" :disabled="taskFinished" @click="startTask({task, status: statuses.running})"></button>
+            <button
+                :disabled="taskFinished"
+                @click="confirmRemoveTask(task)"
+                :class="{'i-mdi-delete-alert-outline': confirmedRemove, 'i-mdi-delete-outline': !confirmedRemove}"
+            ></button>
+            <button
+                @click="setStatus({task, status: taskFinished ? statuses.beginning : statuses.finished})"
+                :class="{'i-mdi-check': taskFinished, 'i-mdi-check-outline': !taskFinished}"
+            ></button>
         </div>
     </div>
 </template>
@@ -245,18 +241,14 @@ const getTime = () => {
 }
 
 .assign-project-button {
-    text-align: left;
-    background: #747bff22;
-    border-radius: 1em;
-    width: max-content;
-    padding: 0.2em 0.8em;
-    font-weight: bold;
     color: #747bff;
 }
 
 .task-finished {
     background: #f9f9f9;
+    transition: background-color 0.3s ease;
     border-color: #f9f9f9;
+    transition: border-color 0.3s ease;
 
     textarea {
         color: gray;
@@ -275,5 +267,16 @@ const getTime = () => {
 .info {
     display: flex;
     gap: 0.5em;
+    font-size: small;
+}
+.save {
+    color: #747bff;
+    top: 1em;
+    right: 0;
+}
+
+button:hover {
+    transform: scale(1.3);
+    transition: transform 0.3s ease;
 }
 </style>
