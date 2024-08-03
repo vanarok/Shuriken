@@ -1,5 +1,5 @@
 <template>
-    <div :class="{'task-finished': taskFinished}" class="container">
+    <div :class="{'task-finished': taskFinished}" class="container" @mouseover="hover = true" @mouseleave="hover = false">
         <textarea
             :class="[{'task-text-overlay-effect': visibleOverlay}]"
             :value="task.description"
@@ -8,25 +8,36 @@
             style="background: none; font-family: Inter; font-size: 1.2em; padding: 0; width: 100%; height: 100%; border: none"
             type="text"
         />
-        <div class="info">
-            <span class="time">{{ getTime() }}</span>
-            <button
-                v-if="!task.project_id"
-                class="assign-project-button i-mdi-folder-plus-outline"
-                @click="enableAssignProjectMode(task)"
-            ></button>
-            <button v-if="false" class="i-mdi-content-save-outline save"></button>
-            <button class="i-mdi-timer-play" :disabled="taskFinished" @click="startTask({task, status: statuses.running})"></button>
-            <button
-                :disabled="taskFinished"
-                @click="confirmRemoveTask(task)"
-                :class="{'i-mdi-delete-alert-outline': confirmedRemove, 'i-mdi-delete-outline': !confirmedRemove}"
-            ></button>
-            <button
-                @click="setStatus({task, status: taskFinished ? statuses.beginning : statuses.finished})"
-                :class="{'i-mdi-check': taskFinished, 'i-mdi-check-outline': !taskFinished}"
-            ></button>
-        </div>
+        <Transition>
+            <div class="info" v-if="hover">
+                <span class="time">{{ getTime() }}</span>
+                <button
+                    v-if="!task.project_id"
+                    class="assign-project-button i-mdi-folder-plus-outline"
+                    @click="enableAssignProjectMode(task)"
+                ></button>
+                <button v-if="false" class="i-mdi-content-save-outline save"></button>
+                <button
+                    class="i-mdi-timer-play"
+                    :class="{disabled: taskFinished}"
+                    :disabled="taskFinished"
+                    @click="startTask({task, status: statuses.running})"
+                ></button>
+                <button
+                    :disabled="taskFinished"
+                    @click="confirmRemoveTask(task)"
+                    :class="{
+                        'i-mdi-delete-alert-outline': confirmedRemove,
+                        'i-mdi-delete-outline': !confirmedRemove,
+                        disabled: taskFinished
+                    }"
+                ></button>
+                <button
+                    @click="setStatus({task, status: taskFinished ? statuses.beginning : statuses.finished})"
+                    :class="{'i-mdi-check': taskFinished, 'i-mdi-check-outline': !taskFinished}"
+                ></button>
+            </div>
+        </Transition>
     </div>
 </template>
 <script lang="ts" setup>
@@ -45,6 +56,8 @@ const props = defineProps<{
 
 const visibleOverlay = ref(false)
 const {statuses} = useSettings()
+
+const hover = ref(false)
 
 const {
     mutate: startTask,
@@ -207,6 +220,11 @@ const getTime = () => {
     position: relative;
     padding: 1.5em;
     box-sizing: border-box;
+    transition: background-color 0.2s ease-in-out;
+
+    &:hover {
+        background: #747bff09;
+    }
 
     .task-text {
         resize: none;
@@ -218,27 +236,6 @@ const getTime = () => {
         max-width: 400px;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
-    }
-
-    .task-actions {
-        display: flex;
-        align-items: center;
-        gap: 1em;
-        justify-content: end;
-        position: absolute;
-        right: 50%;
-        bottom: 50%;
-        transform: translate(50%, 50%);
-
-        button {
-            box-shadow:
-                0 4px 8px 0 rgba(0, 0, 0, 0.2),
-                0 6px 20px 0 rgba(0, 0, 0, 0.19);
-
-            div {
-                font-size: 2em;
-            }
-        }
     }
 
     .task-text-overlay-effect {
@@ -273,7 +270,7 @@ const getTime = () => {
 .info {
     display: flex;
     gap: 0.5em;
-    font-size: small;
+    font-size: 1.2em;
 }
 .save {
     color: #747bff;
@@ -281,8 +278,15 @@ const getTime = () => {
     right: 0;
 }
 
+button {
+    transition: transform 0.25s;
+}
 button:hover {
     transform: scale(1.3);
-    transition: transform 0.3s ease;
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.3;
 }
 </style>
