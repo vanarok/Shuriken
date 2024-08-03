@@ -20,12 +20,6 @@ importers:
       dayjs:
         specifier: ^1.11.11
         version: 1.11.11
-      lint-staged:
-        specifier: ^15.2.8
-        version: 15.2.8
-      simple-git-hooks:
-        specifier: ^2.11.1
-        version: 2.11.1
       vue:
         specifier: ^3.4.0
         version: 3.4.27(typescript@5.4.5)
@@ -39,6 +33,12 @@ importers:
       '@vitejs/plugin-vue':
         specifier: ^5.0.1
         version: 5.0.5(vite@5.2.12(@types/node@20.14.2))(vue@3.4.27(typescript@5.4.5))
+      lint-staged:
+        specifier: ^15.2.8
+        version: 15.2.8
+      simple-git-hooks:
+        specifier: ^2.11.1
+        version: 2.11.1
       typescript:
         specifier: ^5.3.3
         version: 5.4.5
