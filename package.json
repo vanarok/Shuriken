@@ -28,6 +28,14 @@
         "typescript": "^5.3.3",
         "unocss": "^0.61.0",
         "vue-tsc": "^2.0.6",
-        "wxt": "^0.18.0"
+        "wxt": "^0.18.0",        
+        "simple-git-hooks": "^2.11.1",        
+        "lint-staged": "^15.2.8"
+    },
+    "simple-git-hooks": {
+        "pre-commit": "pnpm lint-staged"
+    },
+    "lint-staged": {
+        "*.{js,jsx,ts,tsx,md,html,css,vue}": "prettier --write --config .prettierrc"
     }
 }
