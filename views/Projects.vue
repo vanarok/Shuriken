@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import {useQuery} from "@tanstack/vue-query";
-import {getProjects} from "@/api";
+import {useQuery} from '@tanstack/vue-query'
+import {getProjects} from '@/api'
 
 const emit = defineEmits(['project-choose'])
 

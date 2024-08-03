@@ -62,7 +62,10 @@ const updateStatus = (value: string | null, key: 'beginning' | 'running' | 'fini
                     <a href="https://app.invoicing.co/?#/settings/task_settings">statuses</a>
                     for task
                 </h3>
-                <template v-for="(value, key) in statuses" style="width: 100%; display: flex; align-items: start; flex-direction: column; gap: 0.5em">
+                <template
+                    v-for="(value, key) in statuses"
+                    style="width: 100%; display: flex; align-items: start; flex-direction: column; gap: 0.5em"
+                >
                     <label :for="value || key">{{ capitalizeFirstLetter(key) }} status</label>
                     <template v-if="isError">
                         <select :id="value || key" disabled required>

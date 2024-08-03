@@ -10,7 +10,11 @@
         />
         <div class="info">
             <span class="time">{{ getTime() }}</span>
-            <button v-if="!task.project_id" class="assign-project-button i-mdi-folder-plus-outline" @click="enableAssignProjectMode(task)"></button>
+            <button
+                v-if="!task.project_id"
+                class="assign-project-button i-mdi-folder-plus-outline"
+                @click="enableAssignProjectMode(task)"
+            ></button>
             <button v-if="false" class="i-mdi-content-save-outline save"></button>
             <button class="i-mdi-timer-play" :disabled="taskFinished" @click="startTask({task, status: statuses.running})"></button>
             <button
@@ -227,7 +231,9 @@ const getTime = () => {
         transform: translate(50%, 50%);
 
         button {
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            box-shadow:
+                0 4px 8px 0 rgba(0, 0, 0, 0.2),
+                0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
             div {
                 font-size: 2em;

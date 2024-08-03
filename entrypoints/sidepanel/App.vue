@@ -57,8 +57,15 @@ if (!isComplete.value) {
             <div v-else style="display: flex; flex-direction: column; gap: 1em">
                 <div class="control-panel">
                     <Transition mode="out-in">
-                        <div v-if="page === 'tasks'" style="display: flex; flex-direction: column; gap: 1em; width: 100%; align-items: center">
-                            <ProjectsActivator :projectId @open-projects-page="page = 'projects'" @clear-project-choose="updateProjectChoose(null)" />
+                        <div
+                            v-if="page === 'tasks'"
+                            style="display: flex; flex-direction: column; gap: 1em; width: 100%; align-items: center"
+                        >
+                            <ProjectsActivator
+                                :projectId
+                                @open-projects-page="page = 'projects'"
+                                @clear-project-choose="updateProjectChoose(null)"
+                            />
                             <div v-if="project" class="values">
                                 <div>
                                     Budget
@@ -77,7 +84,11 @@ if (!isComplete.value) {
                         <button v-else-if="assignProjectMode" id="project-choose-activator" @click="cancelAssignProjectMode">
                             <span>Cancel</span>
                         </button>
-                        <button v-else-if="page === 'projects' || page === 'settings'" id="project-choose-activator" @click="page = 'tasks'">
+                        <button
+                            v-else-if="page === 'projects' || page === 'settings'"
+                            id="project-choose-activator"
+                            @click="page = 'tasks'"
+                        >
                             <span>Return to tasks</span>
                         </button>
                     </Transition>

@@ -4,7 +4,9 @@ import presetIcons from '@unocss/preset-icons'
 
 export default defineConfig({
     presets: [
-        presetIcons({ /* options */}),
+        presetIcons({
+            /* options */
+        })
         // ...other presets
-    ],
+    ]
 })

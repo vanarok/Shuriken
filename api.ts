@@ -16,7 +16,17 @@ export const getClients = () => api.get('/clients?per_page=6&page=1?status=activ
 export const getProjects = () => api.get('/projects?per_page=6&page=1?&status=active&without_deleted_clients=true&sort=budgeted_hours|desc')
 export const getProject = (id: string) => api.get(`/projects/${id}`)
 
-export const getTasks = ({clientId, projectId, taskStatusId, filter}: {clientId?: string; projectId: string | null; taskStatusId?: string; filter?: string}) =>
+export const getTasks = ({
+    clientId,
+    projectId,
+    taskStatusId,
+    filter
+}: {
+    clientId?: string
+    projectId: string | null
+    taskStatusId?: string
+    filter?: string
+}) =>
     api.get(`/tasks?without_deleted_clients=true&sort=number|desc&per_page=6&page=1&client_status=uninvoiced&status=active`, {
         params: {
             project_tasks: projectId,
@@ -41,7 +51,8 @@ export const putTask = (
             ...(action && {[action]: true})
         }
     })
-export const postTask = ({description, projectId}: {description: string; projectId: string}) => api.post(`/tasks`, {description, project_id: projectId})
+export const postTask = ({description, projectId}: {description: string; projectId: string}) =>
+    api.post(`/tasks`, {description, project_id: projectId})
 export const deleteTask = (id: string) => api.delete(`/tasks/${id}`)
 
 export const getTaskStatuses = () => api.get('/task_statuses')
