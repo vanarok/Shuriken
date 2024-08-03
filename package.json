@@ -2,7 +2,7 @@
     "name": "shuriken",
     "description": "manifest.json description",
     "private": true,
-    "version": "0.0.7a",
+    "version": "0.0.7b",
     "type": "module",
     "scripts": {
         "dev": "wxt",
