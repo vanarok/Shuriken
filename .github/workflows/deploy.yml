@@ -57,7 +57,7 @@ jobs:
           pnpm run zip
       - name: Submit to stores
         run: |
-          pnpm wxt submit --dry-run \
+          pnpm wxt submit \
             --chrome-zip ${{ env.DIRECTORY }}/${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-chrome.zip \
             --firefox-sources-zip ${{ env.DIRECTORY }}/${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-sources.zip \
         env:
