@@ -22,6 +22,7 @@ const useDebounce = (value: Ref<string>, delay: number): Ref<string> => {
     })
     return debounceValue
 }
+
 const filterDebounced = useDebounce(filter, 1000)
 const {
     data: tasks,
@@ -95,12 +96,12 @@ const {mutate: createTask} = useMutation({
         </h3>
         <Transition mode="out-in">
             <div v-if="isPending">
-                <div v-for="skeleton in 6" class="task-skeleton">
+                <div v-for="_skeleton in 6" class="task-skeleton">
                     <div class="task-text-skeleton"></div>
                 </div>
             </div>
             <div v-else-if="isError">{{ error.message }}</div>
-            <div v-else class="tasks">
+            <div v-else :class="{'recent-tasks': !projectId, 'project-tasks': projectId}" class="tasks">
                 <TransitionGroup name="list">
                     <Task v-for="task in tasks?.data" :key="task.id" :project :task="task" />
                 </TransitionGroup>
@@ -114,6 +115,20 @@ const {mutate: createTask} = useMutation({
     display: flex;
     flex-direction: column;
     gap: 1em;
+    overflow-y: scroll;
+}
+
+.recent-tasks {
+    height: calc(100vh - 10.3rem);
+}
+
+.project-tasks {
+    height: calc(100vh - 17.3rem);
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.tasks::-webkit-scrollbar {
+    display: none;
 }
 
 .task-skeleton {

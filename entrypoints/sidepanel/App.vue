@@ -77,8 +77,14 @@ if (!isComplete.value) {
                                 </div>
                                 <div v-if="project.due_date">
                                     Due date
-                                    <div class="value" style="width: 8em">{{ new Date(project.due_date).toLocaleDateString() }}</div>
+                                    <div class="value" style="width: 8em">
+                                        {{ new Date(project.due_date).toLocaleDateString() }}
+                                    </div>
                                 </div>
+                            </div>
+                            <div v-if="project" :title="project.private_notes" class="private-notes">
+                                <strong>Private notes:</strong>
+                                {{ project.private_notes }}
                             </div>
                         </div>
                         <button v-else-if="assignProjectMode" id="project-choose-activator" @click="cancelAssignProjectMode">
@@ -152,10 +158,28 @@ if (!isComplete.value) {
     }
 }
 
+.private-notes {
+    text-overflow: ellipsis;
+    min-height: 35.99px;
+    width: 100%;
+    max-width: 400px;
+    text-align: left;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
 .settings-button {
-    font-size: 2em;
+    font-size: 1.3rem;
     position: absolute;
-    bottom: 0.6em;
-    left: 0.3em;
+    bottom: 0.8rem;
+    left: 0.1rem;
+    color: #747bff66;
+    transition: color 0.2s ease-in-out;
+
+    &:hover {
+        color: #747bff;
+    }
 }
 </style>
