@@ -82,7 +82,7 @@ if (!isComplete.value) {
                                     </div>
                                 </div>
                             </div>
-                            <div v-if="project" :title="project.private_notes" class="private-notes">
+                            <div v-if="project && project.private_notes" :title="project.private_notes" class="private-notes">
                                 <strong>Private notes:</strong>
                                 {{ project.private_notes }}
                             </div>
