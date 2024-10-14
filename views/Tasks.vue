@@ -118,14 +118,6 @@ const {mutate: createTask} = useMutation({
     overflow-y: scroll;
 }
 
-.recent-tasks {
-    height: calc(100vh - 10.3rem);
-}
-
-.project-tasks {
-    height: calc(100vh - 17.3rem);
-}
-
 /* Hide scrollbar for Chrome, Safari and Opera */
 .tasks::-webkit-scrollbar {
     display: none;
