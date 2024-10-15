@@ -27,7 +27,7 @@ export const getTasks = ({
     taskStatusId?: string
     filter?: string
 }) =>
-    api.get(`/tasks?without_deleted_clients=true&sort=number|desc&per_page=6&page=1&client_status=uninvoiced&status=active`, {
+    api.get(`/tasks?without_deleted_clients=true&sort=number|desc&per_page=60&page=1&client_status=uninvoiced&status=active`, {
         params: {
             project_tasks: projectId,
             client_id: clientId,
