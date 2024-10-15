@@ -116,6 +116,8 @@ const {mutate: createTask} = useMutation({
     flex-direction: column;
     gap: 1em;
     overflow-y: scroll;
+    padding-bottom: 50rem;
+    max-height: 60vh;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
