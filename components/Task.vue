@@ -4,9 +4,17 @@
             :class="[{'task-text-overlay-effect': visibleOverlay}]"
             :value="task.description"
             class="task-text"
-            disabled
-            style="background: none; font-family: Inter; font-size: 1.2em; padding: 0; width: 100%; height: 100%; border: none"
+            style="
+                background: none;
+                font-family: Inter;
+                font-size: 1.2em;
+                width: 100%;
+                height: 100%;
+                border: none;
+                outline-color: #747bff55;
+            "
             type="text"
+            @input="updateDescription($event.target.value)"
         />
         <Transition>
             <div v-if="hover" class="info">
@@ -206,6 +214,23 @@ const getTime = () => {
     )
     return new Date(time * 1000).toISOString().slice(11, 19)
 }
+
+const updateDescription = (description: string) => {
+    editDescription({description})
+}
+
+const {mutate: editDescription} = useMutation({
+    mutationFn: ({description}: {description: string}) =>
+        putTask(props.task.id, {
+            data: {
+                ...props.task,
+                description
+            }
+        }),
+    onError(_, __, context) {
+        queryClient.setQueryData(['tasks', props.project?.id ?? null], context.previousTodos)
+    }
+})
 </script>
 
 <style scoped>
