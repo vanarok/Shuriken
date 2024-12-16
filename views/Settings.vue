@@ -59,7 +59,7 @@ const updateStatus = (value: string | null, key: 'beginning' | 'running' | 'fini
             <form v-if="enabled" class="select-statuses" @submit.prevent="saveStatuses">
                 <h3>
                     2. Select
-                    <a href="https://app.invoicing.co/?#/settings/task_settings">statuses</a>
+                    <a href="https://app.invoicing.co/?#/settings/task_settings" target="_blank">statuses</a>
                     for task
                 </h3>
                 <template
