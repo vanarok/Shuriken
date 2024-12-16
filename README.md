@@ -26,6 +26,7 @@ Open-source alternative for the official Invoice Ninja: Tasks Chrome extension
     - Authentication with API Token for Invoice Ninja
     - Configuring task statuses
     - Simple setup configuration
+    - Edit task
 - **Publish**
     - Published on Chrome Store
 - **Advanced Features**
@@ -35,7 +36,6 @@ Open-source alternative for the official Invoice Ninja: Tasks Chrome extension
 
 - **Advanced Features**
     - Search projects
-    - Edit task
     - Add and remove time from task
     - Add and remove statuses from task
     - Edit description for task segments
