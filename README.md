@@ -30,12 +30,12 @@ Open-source alternative for the official Invoice Ninja: Tasks Chrome extension
     - Published on Chrome Store
 - **Advanced Features**
     - Automate publishing on Chrome Store
+    - Edit task
 
 ### To Do
 
 - **Advanced Features**
     - Search projects
-    - Edit task
     - Add and remove time from task
     - Add and remove statuses from task
     - Edit description for task segments
